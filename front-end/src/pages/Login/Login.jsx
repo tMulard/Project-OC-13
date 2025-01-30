@@ -1,0 +1,61 @@
+import { useState } from "react";
+import { useAuth } from "../../provider/AuthProvider";
+
+import "./Login.css"
+
+
+const Login = () => {
+  const { login, isAuth } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    login({ email, password });
+  };
+
+  return (
+    <>
+      <main class="main bg-dark">
+        <section class="sign-in-content">
+          <i class="fa fa-user-circle sign-in-icon"></i>
+          <h1>Log in</h1>
+          <form onSubmit={onSubmit}>
+            <div className="input-wrapper">
+              <label for="mail">Email: </label>
+              <input
+                type="text"
+                name="email"
+                id="mail"
+                placeholder="example@mail.com"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </div>
+            <div className="input-wrapper">
+              <label for="password">Password: </label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="12345678"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </div>
+            <div class="input-remember">
+              <input type="checkbox" id="remember-me" />
+              <label for="remember-me">Remember me</label>
+            </div>
+            <button type="submit" class="sign-in-button">Log in</button>
+          </form>
+        </section>
+      </main>
+      <footer class="footer">
+        <p class="footer-text">Copyright 2020 Argent Bank</p>
+      </footer>
+    </>
+  );
+};
+
+export default Login;

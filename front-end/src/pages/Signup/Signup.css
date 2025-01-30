@@ -1,0 +1,14 @@
+img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    padding: 20px;
+}
+
+.formContainer form {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    gap: 10px;
+    max-width: 150px;
+}

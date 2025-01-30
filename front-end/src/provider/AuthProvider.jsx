@@ -12,6 +12,9 @@ const AuthContext = createContext({
   },
   signup: () => {
     throw new Error("signup n'est pas encore initialisée");
+  },
+  getProfile: () => {
+    throw new Error("getProfile n'est pas encore initialisée");
   }
 });
 
@@ -66,6 +69,27 @@ const AuthProvider = ({ children }) => {
     }
   }
 
+  const getProfile = async (token) => {
+    try {
+        const fetchData = await fetch("http://localhost:3001/api/v1/user/profile", {
+            method: "POST",
+            headers: { 
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}` 
+            }
+          });
+    
+        const response = await fetchData.json();
+        
+        if (response.status === 200) {
+            return response.body;
+          }
+
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -73,7 +97,8 @@ const AuthProvider = ({ children }) => {
         token,
         login,
         logout,
-        signup
+        signup,
+        getProfile
       }}
     >
       {children}
