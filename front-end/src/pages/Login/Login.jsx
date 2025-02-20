@@ -16,13 +16,13 @@ const Login = () => {
 
   return (
     <>
-      <main class="main bg-dark">
-        <section class="sign-in-content">
-          <i class="fa fa-user-circle sign-in-icon"></i>
+      <main className="main bg-dark">
+        <section className="sign-in-content">
+          <i className="fa fa-user-circle sign-in-icon"></i>
           <h1>Log in</h1>
           <form onSubmit={onSubmit}>
             <div className="input-wrapper">
-              <label for="mail">Email: </label>
+              <label htmlFor="mail">Email: </label>
               <input
                 type="text"
                 name="email"
@@ -33,7 +33,7 @@ const Login = () => {
               />
             </div>
             <div className="input-wrapper">
-              <label for="password">Password: </label>
+              <label htmlFor="password">Password: </label>
               <input
                 type="password"
                 name="password"
@@ -43,16 +43,16 @@ const Login = () => {
                 onChange={(event) => setPassword(event.target.value)}
               />
             </div>
-            <div class="input-remember">
+            <div className="input-remember">
               <input type="checkbox" id="remember-me" />
-              <label for="remember-me">Remember me</label>
+              <label htmlFor="remember-me">Remember me</label>
             </div>
-            <button type="submit" class="sign-in-button">Log in</button>
+            <button type="submit" className="sign-in-button">Log in</button>
           </form>
         </section>
       </main>
-      <footer class="footer">
-        <p class="footer-text">Copyright 2020 Argent Bank</p>
+      <footer className="footer">
+        <p className="footer-text">Copyright 2020 Argent Bank</p>
       </footer>
     </>
   );

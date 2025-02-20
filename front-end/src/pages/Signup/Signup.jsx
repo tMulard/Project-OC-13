@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../provider/AuthProvider";
 
-import logo from '../../assets/logo.png'
-import "./Signup.css"
+import "./Signup.css";
 
 const Signup = () => {
   const { signup, isAuth } = useAuth();
@@ -10,21 +9,28 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-    signup({ email, password, firstName, lastName });
+    setErrorMessage("");
+    const response = await signup({ email, password, firstName, lastName });
+
+    if (response.status !== 200) {
+      setErrorMessage(response.message);
+    }
   };
 
   return (
     <>
-      <main class="main bg-dark">
-        <section class="sign-in-content">
-          <i class="fa fa-user-circle sign-in-icon"></i>
+      <main className="main bg-dark">
+        <section className="sign-in-content">
+          <i className="fa fa-user-circle sign-in-icon"></i>
           <h1>Sign up</h1>
+          <p className="error">{errorMessage}</p>
           <form onSubmit={onSubmit}>
             <div className="input-wrapper">
-              <label for="mail">Email: </label>
+              <label htmlFor="mail">Email: </label>
               <input
                 type="text"
                 name="email"
@@ -35,7 +41,7 @@ const Signup = () => {
               />
             </div>
             <div className="input-wrapper">
-              <label for="password">Password: </label>
+              <label htmlFor="password">Password: </label>
               <input
                 type="password"
                 name="password"
@@ -46,7 +52,7 @@ const Signup = () => {
               />
             </div>
             <div className="input-wrapper">
-              <label for="firstName">First Name: </label>
+              <label htmlFor="firstName">First Name: </label>
               <input
                 type="text"
                 name="firstName"
@@ -57,7 +63,7 @@ const Signup = () => {
               />
             </div>
             <div className="input-wrapper">
-              <label for="lastName">Last Name: </label>
+              <label htmlFor="lastName">Last Name: </label>
               <input
                 type="text"
                 name="lastName"
@@ -67,12 +73,14 @@ const Signup = () => {
                 onChange={(event) => setLastName(event.target.value)}
               />
             </div>
-            <button type="submit" class="sign-in-button">Sign Up</button>
+            <button type="submit" className="sign-in-button">
+              Sign Up
+            </button>
           </form>
         </section>
       </main>
-      <footer class="footer">
-        <p class="footer-text">Copyright 2020 Argent Bank</p>
+      <footer className="footer">
+        <p className="footer-text">Copyright 2020 Argent Bank</p>
       </footer>
     </>
   );
