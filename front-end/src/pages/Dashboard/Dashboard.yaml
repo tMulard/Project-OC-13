@@ -1,67 +1,153 @@
-import { useEffect } from "react";
-import { useAuth } from "../../provider/AuthProvider";
-import { useNavigate } from "react-router";
-
-import "./Dashboard.css";
-
-const Dashboard = () => {
-const { isAuth, profile } = useAuth();
-let navigate = useNavigate();
-
-useEffect(() => {
-if (!isAuth) {
-navigate("/login");
-}
-}, [isAuth]);
-
-return (
-<>
-<main className="main bg-dark">
-<div className="header">
-<h1>
-Welcome back
-<br />
-{profile?.firstName} !
-</h1>
-<button className="edit-button">Edit Name</button>
-</div>
-<h2 className="sr-only">Accounts</h2>
-<section className="account">
-<div className="account-content-wrapper">
-<h3 className="account-title">Argent Bank Checking (x8349)</h3>
-<p className="account-amount">$2,082.79</p>
-<p className="account-amount-description">Available Balance</p>
-</div>
-<div className="account-content-wrapper cta">
-<button className="transaction-button">View transactions</button>
-</div>
-</section>
-<section className="account">
-<div className="account-content-wrapper">
-<h3 className="account-title">Argent Bank Savings (x6712)</h3>
-<p className="account-amount">$10,928.42</p>
-<p className="account-amount-description">Available Balance</p>
-</div>
-<div className="account-content-wrapper cta">
-<button className="transaction-button">View transactions</button>
-</div>
-</section>
-<section className="account">
-<div className="account-content-wrapper">
-<h3 className="account-title">Argent Bank Credit Card (x8349)</h3>
-<p className="account-amount">$184.30</p>
-<p className="account-amount-description">Current Balance</p>
-</div>
-<div className="account-content-wrapper cta">
-<button className="transaction-button">View transactions</button>
-</div>
-</section>
-</main>
-<footer className="footer">
-<p className="footer-text">Copyright 2020 Argent Bank</p>
-</footer>
-</>
-);
-};
-
-export default Dashboard;
+swagger: '2.0'
+info:
+title: Bank Argent transaction API documentation
+  description: Contains all available transaction-related API endpoints in this codebase
+  version: '1.0.0'
+  termsOfService: 'http://swagger.io/terms/'
+host: localhost:3001
+basePath: /dashboard
+schemes:
+  - http
+paths:
+  /dashboard:
+    post:
+      security:
+        - Bearer: Account id
+      tags:
+        - Account Module
+      summary: Dashboard API
+      description: API for fetching an account
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach account id
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Account retrieved successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    post:
+      security:
+        - Bearer: transactionId
+      tags:
+        - Account Module
+      summary: Dashboard API
+      description: Add a new transaction to the account
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach transaction id
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+    put:
+      security:
+        - Bearer: transactionId
+      tags:
+        - Transaction Module
+      summary: Dashboard API
+      description: API for the update of a transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach transaction id
+          required: true
+        - in: body
+          name: body
+          description: Update transaction attributes
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateTransaction'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction retrieved successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - Transaction Module
+      summary: Account API
+      description: delete a transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach transaction id
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: transactionId
+          description: Transaction id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid transaction value
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  Account:
+    properties:
+      id:
+        type: string
+        description: account number
+      balance:
+        type: string
+        description: account balance
+      transactions:
+        type: array
+        description: list of transactions
+  ApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          balance:
+            type: string
+  Transaction:
+    type: object
+    properties:
+      transactionId:
+        type: string
+      value:
+        type: string
+      date:
+        type: date
+      origin:
+        type: string
+      destination:
+        type: string
