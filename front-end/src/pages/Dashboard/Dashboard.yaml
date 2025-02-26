@@ -1,24 +1,128 @@
 swagger: '2.0'
 info:
-title: Bank Argent transaction API documentation
-  description: Contains all available transaction-related API endpoints in this codebase
+  title: Bank Argent API documentation
+  description: Contains all available API endpoints in this codebase
   version: '1.0.0'
   termsOfService: 'http://swagger.io/terms/'
 host: localhost:3001
-basePath: /dashboard
+basePath: /api/v1
 schemes:
   - http
-paths:
+paths: 
+  /user/login:
+    post:
+      tags:
+        - User Module
+      summary: Login
+      description: API for Login
+      parameters:
+        - in: body
+          name: body
+          description: Login Payload
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Login Successfully
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/signup:
+    post:
+      tags:
+        - User Module
+      summary: Signup
+      description: API for Signup
+      parameters:
+        - in: body
+          name: body
+          description: Signup Payload
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Signup Successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/profile:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for fetching a user profile
+      parameters:
+        - type: string
+          in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User profile retrieved successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for updating a user profile
+      parameters:
+        - type: string
+          in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Update user profile attributes
+          required: true
+          schema:
+            $ref: '#/definitions/UserProfile'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User profile retrieved successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
   /dashboard:
     post:
       security:
-        - Bearer: Account id
+        - Bearer: []
       tags:
         - Account Module
       summary: Dashboard API
       description: API for fetching an account
       parameters:
-        - in: header
+        - type: string
+          in: header
           name: Authorization
           description: Attach account id
           required: true
@@ -33,15 +137,17 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /dashboard/transactions:
     post:
       security:
-        - Bearer: transactionId
+        - Bearer: []
       tags:
-        - Account Module
-      summary: Dashboard API
+        - Transaction Module
+      summary: Add a new transaction
       description: Add a new transaction to the account
       parameters:
-        - in: header
+        - type: string
+          in: header
           name: Authorization
           description: Attach transaction id
           required: true
@@ -58,13 +164,14 @@ paths:
           description: Validation exception
     put:
       security:
-        - Bearer: transactionId
+        - Bearer: []
       tags:
         - Transaction Module
-      summary: Dashboard API
+      summary: Edit a transaction
       description: API for the update of a transaction
       parameters:
-        - in: header
+        - type: string
+          in: header
           name: Authorization
           description: Attach transaction id
           required: true
@@ -73,7 +180,7 @@ paths:
           description: Update transaction attributes
           required: true
           schema:
-            $ref: '#/definitions/UpdateTransaction'
+            $ref: '#/definitions/ApiResponse'
       produces:
         - application/json
       responses:
@@ -88,15 +195,14 @@ paths:
     delete:
       tags:
         - Transaction Module
-      summary: Account API
+      summary: Delete a transaction
       description: delete a transaction
       parameters:
-        - in: header
+        - type: string
+          in: header
           name: Authorization
           description: Attach transaction id
           required: true
-          schema:
-            type: string
         - in: body
           name: transactionId
           description: Transaction id to delete
@@ -113,6 +219,28 @@ securityDefinitions:
     name: Authorization
     in: header
 definitions:
+  User:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+      firstName:
+        type: string
+        description: user first name
+      lastName:
+        type: string
+        description: user last name
+  Login:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
   Account:
     properties:
       id:
@@ -136,8 +264,20 @@ definitions:
         properties:
           id:
             type: string
-          balance:
+          email:
             type: string
+  LoginResponse:
+    type: object
+    properties:
+      token:
+        type: string
+  UserProfile:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
   Transaction:
     type: object
     properties:
@@ -146,7 +286,7 @@ definitions:
       value:
         type: string
       date:
-        type: date
+        type: string
       origin:
         type: string
       destination:
