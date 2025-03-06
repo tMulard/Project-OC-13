@@ -64,7 +64,7 @@ paths:
       tags:
         - User Module
       summary: User Profile API
-      description: API for fetching a user profile
+      description: API for fetching a user profile (to be changed to GET)
       parameters:
         - type: string
           in: header
@@ -113,11 +113,11 @@ paths:
         '500':
           description: Internal Server Error
   /dashboard:
-    post:
+    get:
       security:
         - Bearer: []
       tags:
-        - Account Module
+        - Account Module 🆕
       summary: Dashboard API
       description: API for fetching an account
       parameters:
@@ -138,11 +138,35 @@ paths:
         '500':
           description: Internal Server Error
   /dashboard/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module 🆕
+      summary: Transaction API
+      description: API for fetching a transaction
+      parameters:
+        - type: string
+          in: header
+          name: Authorization
+          description: Attach account id
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction retrieved successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
     post:
       security:
         - Bearer: []
       tags:
-        - Transaction Module
+        - Transaction Module 🆕
       summary: Add a new transaction
       description: Add a new transaction to the account
       parameters:
@@ -166,7 +190,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transaction Module
+        - Transaction Module 🆕
       summary: Edit a transaction
       description: API for the update of a transaction
       parameters:
@@ -194,7 +218,7 @@ paths:
           description: Internal Server Error
     delete:
       tags:
-        - Transaction Module
+        - Transaction Module 🆕
       summary: Delete a transaction
       description: delete a transaction
       parameters:
