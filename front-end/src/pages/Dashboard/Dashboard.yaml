@@ -132,7 +132,7 @@ paths:
         '200':
           description: Account retrieved successully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/ApiDashboard'
         '400':
           description: Invalid Fields
         '500':
@@ -157,7 +157,7 @@ paths:
         '200':
           description: Transaction retrieved successully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/ApiTransaction'
         '400':
           description: Invalid Fields
         '500':
@@ -181,7 +181,7 @@ paths:
         '200':
           description: Successful operation
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/ApiTransaction'
         '400':
           description: Invalid input
         '422':
@@ -204,7 +204,7 @@ paths:
           description: Update transaction attributes
           required: true
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/ApiTransaction'
       produces:
         - application/json
       responses:
@@ -289,6 +289,26 @@ definitions:
           id:
             type: string
           email:
+            type: string
+  ApiTransaction:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          transactionId:
+            type: string
+          value:
+            type: string
+          date:
+            type: string
+          origin:
+            type: string
+          destination:
             type: string
   LoginResponse:
     type: object
