@@ -1,18 +1,40 @@
 import { useState } from "react";
-import { useAuth } from "../../provider/AuthProvider";
 
 import "./Login.css"
+import { useDispatch } from "react-redux";
+
+import { useNavigate } from "react-router";
+import { setIsAuth, setToken } from "../../../store/AuthProvider";
 
 
 const Login = () => {
-  const { login, isAuth } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const onSubmit = (event) => {
+  const dispatch = useDispatch();
+
+  const onSubmit = async (event) => {
     event.preventDefault();
-    login({ email, password });
+    try {
+      const fetchData = await fetch("http://localhost:3001/api/v1/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const response = await fetchData.json();
+      
+      if (response.status === 200 && response.body.token) {
+        dispatch(setIsAuth(true))
+        dispatch(setToken(response.body.token))
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
 
   return (
     <>

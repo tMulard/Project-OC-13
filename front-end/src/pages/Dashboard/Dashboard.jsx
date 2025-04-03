@@ -1,18 +1,22 @@
 import { useEffect } from "react";
 import { useAuth } from "../../provider/AuthProvider";
 import { useNavigate } from "react-router";
-
+import { store } from "../../../store/AuthProvider";
 import "./Dashboard.css";
+import { useDispatch, useSelector } from "react-redux";
 
 const Dashboard = () => {
-  const { isAuth, profile } = useAuth();
+  const { profile } = useAuth();
   let navigate = useNavigate();
 
+  const isAuth = useSelector((state) => state.auth.isAuth)
+  
   useEffect(() => {
     if (!isAuth) {
       navigate("/login");
     }
   }, [isAuth]);
+
 
   return (
     <>
@@ -23,6 +27,7 @@ const Dashboard = () => {
             <br />
             {profile?.firstName} !
           </h1>
+
           <button className="edit-button">Edit Name</button>
         </div>
         <h2 className="sr-only">Accounts</h2>
