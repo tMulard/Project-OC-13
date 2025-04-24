@@ -1,14 +1,17 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import "./Header.css";
 import logo from "../../assets/logo.png";
-import { useAuth } from "../../provider/AuthProvider";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, setProfile } from "../../../store/AuthProvider";
+import { useEffect } from "react";
 
 const Header = () => {
-  const { logout, profile } = useAuth();
 
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.isAuth);
-
+  const token = useSelector((state) => state.auth.token?.payload);// ? nécessaire pour savoir si on reçoit les données et éviter une erreur au chargement
+  const navigate = useNavigate();
+  
   const getProfile = async (token) => {
     try {
       const fetchData = await fetch(
@@ -32,9 +35,13 @@ const Header = () => {
     }
   };
 
+  const profile = useSelector((state) => state.auth.profile?.payload)
+  
   useEffect(() => {
-    getProfile();
-  }, []);
+    if (token) {
+      getProfile(token);
+    }
+  }, [token]);
 
   return (
     <nav className="main-nav">
@@ -53,7 +60,9 @@ const Header = () => {
               <i className="fa fa-user-circle"></i>
               {profile?.firstName}
             </Link>
-            <button onClick={logout}>Sign out</button>
+            <button onClick={() => {dispatch(logout())
+              navigate("/")
+            }}>Sign out</button>
           </>
         ) : (
           <>

@@ -19,10 +19,15 @@ const AuthSlice = createSlice({
     setProfile: (state, profile) => {
       state.profile = profile;
     },
+    logout: (state) => {
+      state.isAuth = false,
+      state.token = null,
+      state.profile = null;
+    }
   },
 });
 
-export const { setIsAuth, setToken } = AuthSlice.actions;
+export const { setIsAuth, setToken, setProfile, logout } = AuthSlice.actions;
 
 export const store = configureStore({
   reducer: {
@@ -35,38 +40,6 @@ const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [token, setToken] = useState(null);
   const [profile, setProfile] = useState(null);
-
-  const logout = () => {
-    setIsAuth(false);
-    setToken(null);
-  };
-
-  const signup = async (data) => {
-    try {
-      const fetchData = await fetch(
-        "http://localhost:3001/api/v1/user/signup",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        }
-      );
-
-      const response = await fetchData.json();
-
-      if (response.status === 200 && response.body.token) {
-        setIsAuth(true);
-        setToken(response.body.token);
-        navigate("/dashboard");
-      }
-      if (response.status === 400) {
-        return response;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
 
   useEffect(() => {
     if (token) {
@@ -82,7 +55,7 @@ const AuthProvider = ({ children }) => {
         profile,
         login,
         logout,
-        signup,
+        // signup,
       }}
     >
       {children}

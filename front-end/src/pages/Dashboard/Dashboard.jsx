@@ -1,12 +1,11 @@
 import { useEffect } from "react";
-import { useAuth } from "../../provider/AuthProvider";
 import { useNavigate } from "react-router";
 import { store } from "../../../store/AuthProvider";
 import "./Dashboard.css";
 import { useDispatch, useSelector } from "react-redux";
 
 const Dashboard = () => {
-  const { profile } = useAuth();
+  const profile = useSelector((state) => state.auth.profile?.payload)
   let navigate = useNavigate();
 
   const isAuth = useSelector((state) => state.auth.isAuth)
