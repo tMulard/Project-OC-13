@@ -1,11 +1,8 @@
 import { useState } from "react";
-
 import "./Login.css"
 import { useDispatch } from "react-redux";
-
 import { useNavigate } from "react-router";
-import { setIsAuth, setToken } from "../../../store/AuthProvider";
-
+import { setIsAuth, setToken } from "../../../store/slices/authSlice.js";
 
 const Login = () => {
   const [email, setEmail] = useState("");

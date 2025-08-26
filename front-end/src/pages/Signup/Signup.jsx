@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import "./Signup.css";
 import { useDispatch } from "react-redux";
-import { setIsAuth, setToken } from "../../../store/AuthProvider";
+import { setIsAuth, setToken } from "../../../store/slices/authSlice";
 import { useNavigate } from "react-router";
 
 const Signup = () => {
@@ -17,12 +17,6 @@ const Signup = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    // setErrorMessage("");
-    // const response = await signup({ email, password, firstName, lastName });
-
-    // if (response.status !== 200) {
-    //   setErrorMessage(response.message);
-    // }
     try {
       const fetchData = await fetch("http://localhost:3001/api/v1/user/signup", {
           method: "POST",

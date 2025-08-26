@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
-import { store } from "../../../store/AuthProvider";
 import "./Dashboard.css";
 import { useSelector } from "react-redux";
 

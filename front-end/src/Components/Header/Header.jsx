@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router";
 import "./Header.css";
 import logo from "../../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, setProfile } from "../../../store/AuthProvider";
+import { logout, setProfile } from "../../../store/slices/authSlice";
 import { useEffect } from "react";
 
 const Header = () => {
