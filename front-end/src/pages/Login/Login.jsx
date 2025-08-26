@@ -1,37 +1,24 @@
 import { useState } from "react";
 import "./Login.css"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { setIsAuth, setToken } from "../../../store/slices/authSlice.js";
+import { logIn} from "../../../store/slices/authSlice.js";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  const isAuth = useSelector((state) => state.auth.isAuth)
   const dispatch = useDispatch();
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const fetchData = await fetch("http://localhost:3001/api/v1/user/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const response = await fetchData.json();
-      
-      if (response.status === 200 && response.body.token) {
-        dispatch(setIsAuth(true))
-        dispatch(setToken(response.body.token))
-        navigate("/dashboard");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(logIn(email,password))
   };
-
+  
+  useEffect(() => {
+    if (isAuth) {navigate("/dashboard");}
+  }, [isAuth]);
 
   return (
     <>
