@@ -58,8 +58,31 @@ export const logIn = (email, password) => async (dispatch)=> {
       dispatch(setError(error.toString()));
     }
 
-  }
+}
 
 //formulaire d'update en TODO
+
+export const upDate = (firstName, lastName) => async (dispatch) => {
+
+  try {
+      const fetchData = await fetch("http://localhost:3001/api/v1/user/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstName, lastName }),
+      });
+
+      const response = await fetchData.json();
+      
+      if (response.status === 200 && response.body.token) {
+        dispatch(setIsAuth(true))
+        dispatch(setToken(response.body.token))
+      }
+
+      else if (response.status !== 200 && response.body.token) dispatch(setError(response.status))
+    
+    } catch (error) {
+      dispatch(setError(error.toString()));
+    }
+}
 
 export const { setIsAuth, setToken, setProfile, setError, logout } = AuthSlice.actions;
