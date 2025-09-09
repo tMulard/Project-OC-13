@@ -36,7 +36,7 @@ export const AuthSlice = createSlice({
   }
 });
 
-export const logIn = (email, password) => async (dispatch)=> {
+export const logIn = (email, password) => async (dispatch) => {
     
     try {
       const fetchData = await fetch("http://localhost:3001/api/v1/user/login", {
@@ -60,7 +60,30 @@ export const logIn = (email, password) => async (dispatch)=> {
 
 }
 
-//formulaire d'update en TODO
+export const getProfile = (token) => async (dispatch) => {
+    try {
+      const fetchData = await fetch(
+        "http://localhost:3001/api/v1/user/profile",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const response = await fetchData.json();
+
+      if (response.status === 200) {
+        dispatch(setProfile(response.body));
+      }
+    } catch (error) {
+      dispatch(setError(error.toString()));
+    }
+  };
+
+// formulaire d'update en TODO
 
 export const upDate = (firstName, lastName) => async (dispatch) => {
 

@@ -1,29 +1,35 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "./Dashboard.css";
-import { selectIsAuth, selectProfile } from "../../../store/slices/authSlice";
+import { logIn, selectIsAuth, selectProfile } from "../../../store/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Dashboard = () => {
   let navigate = useNavigate();
-  const profile = selectProfile
-  const isAuth = selectIsAuth
+  const profile = useSelector(selectProfile);
+  const isAuth = useSelector(selectIsAuth);
+  const [modalOpened, setModalOpened] = useState(false);
+  
+  const dispatch = useDispatch();
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    dispatch(logIn(fname, lname))
+    dispatch(logIn(firstName, lastName))
   };
 
-  const displayModal = async (event) => {
-    event.preventDefault();
-    if ($("#modalForm").classList("hidden")) $("#modalForm").removeClass("hidden");
-    else $("#modalForm").appendClass("hidden");
+  const displayModal = () => {
+    setModalOpened(true);
   }
   
+  const closeModal = () => {
+    setModalOpened(false);
+  }
+
   useEffect(() => {
     if (!isAuth) {
       navigate("/login");
     }
-  }, [isAuth]);
+  }, [isAuth, navigate]);
 
 
   return (
@@ -36,17 +42,17 @@ const Dashboard = () => {
             {profile?.firstName} !
           </h1>
 
-          <button className="edit-button" onClick={displayModal()}>Edit Name</button>
-          <form onSubmit={onSubmit} id="modalForm" className="hidden">
+          <button className="edit-button" onClick={displayModal}>Edit Name</button>
+          <form onSubmit={onSubmit} id="modalForm" className={modalOpened? "" : "hidden"}>
             <div className="inputs">
-              <label for="fname">First name:</label><br/>
-              <input type="text" id="fname" name="fname" value="John" /><br/>
-              <label for="lname">Last name:</label><br/>
-              <input type="text" id="lname" name="lname" value="Doe" /><br/>
+              <label htmlFor="fname">First name:</label><br/>
+              <input type="text" id="fname" name="firstName" defaultValue="John" /><br/>
+              <label htmlFor="lname">Last name:</label><br/>
+              <input type="text" id="lname" name="lastName" defaultValue="Doe" /><br/>
             </div>
             <div className="buttons">
               <input type="submit" value="Submit">Save</input>
-              <button onClick={displayModal()}>Cancel</button>
+              <button onClick={closeModal}>Cancel</button>
             </div>
           </form>
         </div>

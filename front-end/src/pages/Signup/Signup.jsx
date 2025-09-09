@@ -36,6 +36,7 @@ const Signup = () => {
       }
     } catch (error) {
       console.log(error);
+      setErrorMessage(error.toString());
     }
   };
 
@@ -74,7 +75,7 @@ const Signup = () => {
               <input
                 type="text"
                 name="firstName"
-                id="firstNamme"
+                id="firstName"
                 placeholder="John"
                 value={firstName}
                 onChange={(event) => setFirstName(event.target.value)}

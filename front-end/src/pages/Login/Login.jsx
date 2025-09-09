@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Login.css"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { logIn} from "../../../store/slices/authSlice.js";
 import { selectIsAuth } from "../../../store/slices/authSlice";
@@ -9,7 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const isAuth = selectIsAuth
+  const isAuth = useSelector(selectIsAuth)
   const dispatch = useDispatch();
 
   const onSubmit = async (event) => {
@@ -19,7 +19,7 @@ const Login = () => {
   
   useEffect(() => {
     if (isAuth) {navigate("/dashboard");}
-  }, [isAuth]);
+  }, [isAuth, navigate]);
 
   return (
     <>

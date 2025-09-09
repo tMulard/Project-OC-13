@@ -1,48 +1,24 @@
 import { Link, useNavigate } from "react-router";
 import "./Header.css";
 import logo from "../../assets/logo.png";
-import { useDispatch } from "react-redux";
-import { logout, selectIsAuth, selectProfile, selectToken, setProfile } from "../../../store/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getProfile, logout, selectIsAuth, selectProfile, selectToken } from "../../../store/slices/authSlice";
 import { useEffect } from "react";
 
 
 const Header = () => {
   
   const dispatch = useDispatch();
-  const isAuth = selectIsAuth
-  const token = selectToken
+  const isAuth = useSelector(selectIsAuth)
+  const token = useSelector(selectToken)
   const navigate = useNavigate();
-  const profile = selectProfile
-  
-  const getProfile = async (token) => {
-    try {
-      const fetchData = await fetch(
-        "http://localhost:3001/api/v1/user/profile",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const response = await fetchData.json();
-
-      if (response.status === 200) {
-        dispatch(setProfile(response.body));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  const profile = useSelector(selectProfile)
   
   useEffect(() => {
     if (token) {
-      getProfile(token);
+      dispatch(getProfile(token));
     }
-  }, [token]);
+  }, [token, dispatch]);
 
   return (
     <nav className="main-nav">
