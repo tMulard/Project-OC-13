@@ -6,7 +6,6 @@ import { setIsAuth, setToken } from "../../../store/slices/authSlice";
 import { useNavigate } from "react-router";
 
 const Signup = () => {
-  // const { signup, isAuth } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");

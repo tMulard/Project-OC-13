@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import "./Login.css"
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { logIn} from "../../../store/slices/authSlice.js";
+import { selectIsAuth } from "../../../store/slices/authSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const isAuth = useSelector((state) => state.auth.isAuth)
+  const isAuth = selectIsAuth
   const dispatch = useDispatch();
 
   const onSubmit = async (event) => {

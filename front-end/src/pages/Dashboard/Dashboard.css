@@ -1,0 +1,15 @@
+.modalForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.modalForm .inputs, .modalForm .buttons {
+    display: flex;
+    flex-direction: row;
+    gap : 20px;
+    justify-content: space-between;
+}
+
+.hidden {
+    display: hidden;
+}

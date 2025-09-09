@@ -1,7 +1,3 @@
-import { Link } from "react-router";
-import Header from "../../Components/Header/Header";
-
-import logo from "../../assets/logo.png";
 import chatIcon from "../../assets/icon-chat.png";
 import moneyIcon from "../../assets/icon-money.png";
 import securityIcon from "../../assets/icon-security.png";

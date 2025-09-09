@@ -1,16 +1,18 @@
 import { Link, useNavigate } from "react-router";
 import "./Header.css";
 import logo from "../../assets/logo.png";
-import { useDispatch, useSelector } from "react-redux";
-import { logout, setProfile } from "../../../store/slices/authSlice";
+import { useDispatch } from "react-redux";
+import { logout, selectIsAuth, selectProfile, selectToken, setProfile } from "../../../store/slices/authSlice";
 import { useEffect } from "react";
 
-const Header = () => {
 
+const Header = () => {
+  
   const dispatch = useDispatch();
-  const isAuth = useSelector((state) => state.auth.isAuth);
-  const token = useSelector((state) => state.auth.token?.payload);// ? nécessaire pour savoir si on reçoit les données et éviter une erreur au chargement
+  const isAuth = selectIsAuth
+  const token = selectToken
   const navigate = useNavigate();
+  const profile = selectProfile
   
   const getProfile = async (token) => {
     try {
@@ -35,7 +37,6 @@ const Header = () => {
     }
   };
 
-  const profile = useSelector((state) => state.auth.profile?.payload)
   
   useEffect(() => {
     if (token) {

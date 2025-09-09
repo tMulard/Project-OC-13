@@ -1,13 +1,23 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import "./Dashboard.css";
-import { useSelector } from "react-redux";
+import { selectIsAuth, selectProfile } from "../../../store/slices/authSlice";
 
 const Dashboard = () => {
-  const profile = useSelector((state) => state.auth.profile?.payload)
   let navigate = useNavigate();
+  const profile = selectProfile
+  const isAuth = selectIsAuth
 
-  const isAuth = useSelector((state) => state.auth.isAuth)
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    dispatch(logIn(fname, lname))
+  };
+
+  const displayModal = async (event) => {
+    event.preventDefault();
+    if ($("#modalForm").classList("hidden")) $("#modalForm").removeClass("hidden");
+    else $("#modalForm").appendClass("hidden");
+  }
   
   useEffect(() => {
     if (!isAuth) {
@@ -26,7 +36,19 @@ const Dashboard = () => {
             {profile?.firstName} !
           </h1>
 
-          <button className="edit-button">Edit Name</button>
+          <button className="edit-button" onClick={displayModal()}>Edit Name</button>
+          <form onSubmit={onSubmit} id="modalForm" className="hidden">
+            <div className="inputs">
+              <label for="fname">First name:</label><br/>
+              <input type="text" id="fname" name="fname" value="John" /><br/>
+              <label for="lname">Last name:</label><br/>
+              <input type="text" id="lname" name="lname" value="Doe" /><br/>
+            </div>
+            <div className="buttons">
+              <input type="submit" value="Submit">Save</input>
+              <button onClick={displayModal()}>Cancel</button>
+            </div>
+          </form>
         </div>
         <h2 className="sr-only">Accounts</h2>
         <section className="account">

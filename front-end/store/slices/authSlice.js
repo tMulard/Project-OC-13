@@ -29,10 +29,10 @@ export const AuthSlice = createSlice({
     }
   },
   selectors: {
-    isAuth : state => state.isAuth,
-    token : state => state.token,
-    profile : state => state.profile,
-    error : state => state.error
+    selectIsAuth : state => state.isAuth,
+    selectToken : state => state.token,
+    selectProfile : state => state.profile,
+    selectError : state => state.error
   }
 });
 
@@ -86,3 +86,4 @@ export const upDate = (firstName, lastName) => async (dispatch) => {
 }
 
 export const { setIsAuth, setToken, setProfile, setError, logout } = AuthSlice.actions;
+export const { selectIsAuth, selectToken, selectProfile, selectError } = AuthSlice.selectors;
