@@ -12,3 +12,7 @@ img {
     gap: 10px;
     max-width: 150px;
 }
+
+.error {
+    color: red;
+}

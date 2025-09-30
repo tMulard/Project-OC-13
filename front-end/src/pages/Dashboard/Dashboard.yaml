@@ -276,6 +276,25 @@ definitions:
       transactions:
         type: array
         description: list of transactions
+  ApiDashboard:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+            description: account number
+          balance:
+            type: string
+            description: account balance
+          transactions:
+            type: array
+            description: list of transactions
   ApiResponse:
     type: object
     properties:

@@ -1,34 +1,73 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "./Dashboard.css";
-import { logIn, selectIsAuth, selectProfile } from "../../../store/slices/authSlice";
+import { selectIsAuth, selectProfile, selectSuccessUpdate, upDate } from "../../../store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Dashboard = () => {
   let navigate = useNavigate();
   const profile = useSelector(selectProfile);
   const isAuth = useSelector(selectIsAuth);
+  const successUpdate = useSelector(selectSuccessUpdate);
   const [modalOpened, setModalOpened] = useState(false);
   
   const dispatch = useDispatch();
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    dispatch(logIn(firstName, lastName))
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+  });
+
+  const [formErrors, setFormErrors] = useState({
+    firstName: '',
+    lastName: '',
+  });
+  
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
-  const displayModal = () => {
-    setModalOpened(true);
-  }
+  const onSubmit = async (event) => {
+    event.preventDefault();
+
+    const errors = {};
+
+    if (!formData.firstName) {
+      errors.firstName = 'First Name is required';
+    }
+
+    if (!formData.lastName) {
+      errors.lastName = 'Last Name is required';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    try {
+      // Perform form submission logic (e.g., API call)
+      await dispatch(upDate(formData.firstName, formData.lastName))
+      // Reset form fields and errors
+      setFormData({ firstName: '', lastName: '' });
+      setFormErrors({});
+    } catch (error) {
+      // Handle form submission error
+      console.error('Form submission failed:', error);
+    }
+  };
+
+  const displayModal = () => {setModalOpened(true);}
   
-  const closeModal = () => {
-    setModalOpened(false);
-  }
+  const closeModal = () => {setModalOpened(false);}
 
   useEffect(() => {
-    if (!isAuth) {
-      navigate("/login");
-    }
+    if (!isAuth) { navigate("/login");}
+    if (successUpdate) { navigate(0);}
   }, [isAuth, navigate]);
 
 
@@ -42,19 +81,47 @@ const Dashboard = () => {
             {profile?.firstName} !
           </h1>
 
-          <button className="edit-button" onClick={displayModal}>Edit Name</button>
-          <form onSubmit={onSubmit} id="modalForm" className={modalOpened? "" : "hidden"}>
-            <div className="inputs">
-              <label htmlFor="fname">First name:</label><br/>
-              <input type="text" id="fname" name="firstName" defaultValue="John" /><br/>
-              <label htmlFor="lname">Last name:</label><br/>
-              <input type="text" id="lname" name="lastName" defaultValue="Doe" /><br/>
-            </div>
-            <div className="buttons">
-              <input type="submit" value="Submit">Save</input>
-              <button onClick={closeModal}>Cancel</button>
-            </div>
-          </form>
+          <button className="edit-button" onClick={displayModal}>
+            Edit Name
+          </button>
+          <div className={modalOpened ? "" : "hidden"}>
+            <form onSubmit={onSubmit} id="modalForm">
+              <div className="inputs">
+                <label htmlFor="fname">First name:</label>
+                <br />
+                <input
+                  type="text"
+                  id="fname"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  placeholder={profile?.firstName}
+                />
+                <br />
+                {formErrors.firstName && (
+                  <p className="error">{formErrors.firstName}</p>
+                )}
+                <label htmlFor="lname">Last name:</label>
+                <br />
+                <input
+                  type="text"
+                  id="lname"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  placeholder={profile?.lastName}
+                />
+                <br />
+                {formErrors.lastName && (
+                  <p className="error">{formErrors.lastName}</p>
+                )}
+              </div>
+              <div className="buttons">
+                <input type="submit" value="Save" />
+                <button onClick={closeModal}>Cancel</button>
+              </div>
+            </form>
+          </div>
         </div>
         <h2 className="sr-only">Accounts</h2>
         <section className="account">

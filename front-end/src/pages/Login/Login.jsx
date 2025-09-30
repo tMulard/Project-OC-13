@@ -6,15 +6,51 @@ import { logIn} from "../../../store/slices/authSlice.js";
 import { selectIsAuth } from "../../../store/slices/authSlice";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const isAuth = useSelector(selectIsAuth)
   const dispatch = useDispatch();
 
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const [formErrors, setFormErrors] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+
   const onSubmit = async (event) => {
     event.preventDefault();
-    dispatch(logIn(email,password))
+
+    // Validate form data
+    const errors = {};
+
+    if (!formData.email) {
+      errors.email = 'Email is required';
+    }
+
+    if (!formData.password) {
+      errors.password = 'Password is required';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    dispatch(logIn(formData.email,formData.password))
   };
   
   useEffect(() => {
@@ -35,9 +71,10 @@ const Login = () => {
                 name="email"
                 id="mail"
                 placeholder="example@mail.com"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                value={formData.email}
+                onChange={handleChange}
               />
+              {formErrors.email && <p className="error">{formErrors.email}</p>}
             </div>
             <div className="input-wrapper">
               <label htmlFor="password">Password: </label>
@@ -46,9 +83,10 @@ const Login = () => {
                 name="password"
                 id="password"
                 placeholder="12345678"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                value={formData.password}
+                onChange={handleChange}
               />
+              {formErrors.password && <p className="error">{formErrors.password}</p>}
             </div>
             <div className="input-remember">
               <input type="checkbox" id="remember-me" />

@@ -7,32 +7,44 @@ export const AuthSlice = createSlice({
     token: null,
     profile: null,
     error: "",
+    successUpdate: false,
+    errorUpdate: null,
   },
   reducers: {
-    setIsAuth: (state, isAuth) => {
-      state.isAuth = isAuth;
+    setIsAuth: (state, action) => {
+      state.isAuth = action.payload;
     },
-    setToken: (state, token) => {
-      state.token = token;
+    setToken: (state, action) => {
+      state.token = action.payload;
     },
-    setProfile: (state, profile) => {
-      state.profile = profile;
+    setProfile: (state, action) => {
+      state.profile = action.payload;
     },
-    setError: (state, error) => {
-      state.error = error;
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
+    setSuccessUpdate: (state, action) => {
+      state.successUpdate = action.payload;
+    },
+    setErrorUpdate: (state, action) => {
+      state.errorUpdate = action.payload;
     },
     logout: (state) => {
       state.isAuth = false,
       state.token = null,
       state.profile = null,
-      state.error = "";
+      state.error = "",
+      state.successUpdate = false,
+      state.errorUpdate = null;
     }
   },
   selectors: {
     selectIsAuth : state => state.isAuth,
     selectToken : state => state.token,
     selectProfile : state => state.profile,
-    selectError : state => state.error
+    selectError : state => state.error,
+    selectSuccessUpdate : state => state.successUpdate,
+    selectErrorUpdate : state => state.errorUpdate
   }
 });
 
@@ -60,8 +72,11 @@ export const logIn = (email, password) => async (dispatch) => {
 
 }
 
-export const getProfile = (token) => async (dispatch) => {
+export const getProfile = () => async (dispatch, getState) => {
     try {
+      //console.log('state', getState())
+      const token = getState().auth.token;
+      //console.log('token', token)
       const fetchData = await fetch(
         "http://localhost:3001/api/v1/user/profile",
         {
@@ -84,29 +99,35 @@ export const getProfile = (token) => async (dispatch) => {
   };
 
 // formulaire d'update en TODO
+//si errorupdate -> erreur plus block
+//si success -> update le profile
 
-export const upDate = (firstName, lastName) => async (dispatch) => {
-
+export const upDate = (firstName, lastName) => async (dispatch, getState) => {
   try {
+      const token = getState().auth.token;
+
       const fetchData = await fetch("http://localhost:3001/api/v1/user/profile", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+         },
         body: JSON.stringify({ firstName, lastName }),
       });
 
       const response = await fetchData.json();
       
       if (response.status === 200 && response.body.token) {
-        dispatch(setIsAuth(true))
-        dispatch(setToken(response.body.token))
+        dispatch(setSuccessUpdate(true));
+        dispatch(setProfile(response.body));
       }
 
       else if (response.status !== 200 && response.body.token) dispatch(setError(response.status))
     
     } catch (error) {
+      dispatch(setErrorUpdate(error.toString()));
       dispatch(setError(error.toString()));
     }
 }
 
 export const { setIsAuth, setToken, setProfile, setError, logout } = AuthSlice.actions;
-export const { selectIsAuth, selectToken, selectProfile, selectError } = AuthSlice.selectors;
+export const { selectIsAuth, selectToken, selectProfile, selectError, selectErrorUpdate, selectSuccessUpdate } = AuthSlice.selectors;

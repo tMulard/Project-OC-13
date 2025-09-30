@@ -6,21 +6,69 @@ import { setIsAuth, setToken } from "../../../store/slices/authSlice";
 import { useNavigate } from "react-router";
 
 const Signup = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [firstName, setFirstName] = useState("");
+  // const [lastName, setLastName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+  });
+
+  const [formErrors, setFormErrors] = useState({
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+
   const onSubmit = async (event) => {
     event.preventDefault();
+    
+    // Validate form data
+    const errors = {};
+
+    if (!formData.email) {
+      errors.email = 'Email is required';
+    }
+
+    if (!formData.password) {
+      errors.password = 'Password is required';
+    }
+
+    if (!formData.firstName) {
+      errors.firstName = 'First name is required';
+    }
+
+    if (!formData.lastName) {
+      errors.lastName = 'Last name is required';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+    
     try {
       const fetchData = await fetch("http://localhost:3001/api/v1/user/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, firstName, lastName }),
+          body: JSON.stringify({ formData }),
         }
       );
 
@@ -55,9 +103,10 @@ const Signup = () => {
                 name="email"
                 id="mail"
                 placeholder="example@mail.com"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                value={formData.email}
+                onChange={handleChange}
               />
+              {formErrors.email && <p className="error">{formErrors.email}</p>}
             </div>
             <div className="input-wrapper">
               <label htmlFor="password">Password: </label>
@@ -66,9 +115,10 @@ const Signup = () => {
                 name="password"
                 id="password"
                 placeholder="12345678"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                value={formData.password}
+                onChange={handleChange}
               />
+              {formErrors.password && <p className="error">{formErrors.password}</p>}
             </div>
             <div className="input-wrapper">
               <label htmlFor="firstName">First Name: </label>
@@ -77,9 +127,10 @@ const Signup = () => {
                 name="firstName"
                 id="firstName"
                 placeholder="John"
-                value={firstName}
-                onChange={(event) => setFirstName(event.target.value)}
+                value={formData.firstName}
+                onChange={handleChange}
               />
+              {formErrors.firstName && <p className="error">{formErrors.firstName}</p>}
             </div>
             <div className="input-wrapper">
               <label htmlFor="lastName">Last Name: </label>
@@ -88,9 +139,10 @@ const Signup = () => {
                 name="lastName"
                 id="lastName"
                 placeholder="Doe"
-                value={lastName}
-                onChange={(event) => setLastName(event.target.value)}
+                value={formData.lastName}
+                onChange={handleChange}
               />
+              {formErrors.lastName && <p className="error">{formErrors.lastName}</p>}
             </div>
             <button type="submit" className="sign-in-button">
               Sign Up
