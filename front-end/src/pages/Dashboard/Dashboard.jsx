@@ -10,19 +10,20 @@ const Dashboard = () => {
   const isAuth = useSelector(selectIsAuth);
   const successUpdate = useSelector(selectSuccessUpdate);
   const [modalOpened, setModalOpened] = useState(false);
-  
+  const [successMessage, setSuccessMessage] = useState('');
+
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    firstName: profile?.firstName,
+    lastName: profile?.lastName,
   });
 
   const [formErrors, setFormErrors] = useState({
     firstName: '',
     lastName: '',
   });
-  
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
@@ -52,8 +53,7 @@ const Dashboard = () => {
     try {
       // Perform form submission logic (e.g., API call)
       await dispatch(upDate(formData.firstName, formData.lastName))
-      // Reset form fields and errors
-      setFormData({ firstName: '', lastName: '' });
+      
       setFormErrors({});
     } catch (error) {
       // Handle form submission error
@@ -61,15 +61,28 @@ const Dashboard = () => {
     }
   };
 
-  const displayModal = () => {setModalOpened(true);}
-  
-  const closeModal = () => {setModalOpened(false);}
+  const displayModal = () => { setModalOpened(true); }
+
+  const closeModal = () => { setModalOpened(false); }
 
   useEffect(() => {
-    if (!isAuth) { navigate("/login");}
-    if (successUpdate) { navigate(0);}
-  }, [isAuth, navigate]);
+    if (!isAuth) { navigate("/login"); }
+    if (successUpdate) {
+      // faire un message
+      closeModal();
+      setSuccessMessage('modification effectué avec succés !');
+    }
+  }, [isAuth, navigate, successUpdate]);
 
+  useEffect(() => {
+    if (profile && profile.firstName && profile.lastName) {
+      setFormData({
+        firstName: profile.firstName,
+        lastName: profile.lastName
+      })
+    }
+
+  }, [profile])
 
   return (
     <>
@@ -93,9 +106,9 @@ const Dashboard = () => {
                   type="text"
                   id="fname"
                   name="firstName"
-                  value={formData.firstName}
+                  defaultValue={formData?.firstName}
                   onChange={handleChange}
-                  placeholder={profile?.firstName}
+                  placeholder={formData?.firstName}
                 />
                 <br />
                 {formErrors.firstName && (
@@ -107,9 +120,9 @@ const Dashboard = () => {
                   type="text"
                   id="lname"
                   name="lastName"
-                  value={formData.lastName}
+                  defaultValue={formData?.lastName}
                   onChange={handleChange}
-                  placeholder={profile?.lastName}
+                  placeholder={formData?.lastName}
                 />
                 <br />
                 {formErrors.lastName && (
@@ -118,10 +131,12 @@ const Dashboard = () => {
               </div>
               <div className="buttons">
                 <input type="submit" value="Save" />
-                <button onClick={closeModal}>Cancel</button>
+                <input type="reset" onClick={closeModal} value="Cancel" />
               </div>
             </form>
+
           </div>
+          {successMessage && <p>{successMessage}</p>}
         </div>
         <h2 className="sr-only">Accounts</h2>
         <section className="account">
