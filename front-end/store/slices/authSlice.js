@@ -48,6 +48,9 @@ export const AuthSlice = createSlice({
   }
 });
 
+export const { setIsAuth, setToken, setProfile, setError, logout, setSuccessUpdate, setErrorUpdate } = AuthSlice.actions;
+export const { selectIsAuth, selectToken, selectProfile, selectError, selectErrorUpdate, selectSuccessUpdate } = AuthSlice.selectors;
+
 export const logIn = (email, password) => async (dispatch) => {
     
     try {
@@ -98,12 +101,10 @@ export const getProfile = () => async (dispatch, getState) => {
     }
   };
 
-// formulaire d'update en TODO
-//si errorupdate -> erreur plus block
-//si success -> update le profile
-
 export const upDate = (firstName, lastName) => async (dispatch, getState) => {
   try {
+      dispatch(setSuccessUpdate(false));
+      dispatch(setErrorUpdate(null));
       const token = getState().auth.token;
 
       const fetchData = await fetch("http://localhost:3001/api/v1/user/profile", {
@@ -116,7 +117,7 @@ export const upDate = (firstName, lastName) => async (dispatch, getState) => {
 
       const response = await fetchData.json();
       
-      if (response.status === 200 && response.body.token) {
+      if (response.status === 200 && response.body) {
         dispatch(setSuccessUpdate(true));
         dispatch(setProfile(response.body));
       }
@@ -128,6 +129,3 @@ export const upDate = (firstName, lastName) => async (dispatch, getState) => {
       dispatch(setError(error.toString()));
     }
 }
-
-export const { setIsAuth, setToken, setProfile, setError, logout } = AuthSlice.actions;
-export const { selectIsAuth, selectToken, selectProfile, selectError, selectErrorUpdate, selectSuccessUpdate } = AuthSlice.selectors;
