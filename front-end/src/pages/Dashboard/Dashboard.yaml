@@ -119,7 +119,7 @@ paths:
       tags:
         - Account Module 🆕
       summary: Dashboard API
-      description: API for fetching an account
+      description: API for fetching the user's accounts
       parameters:
         - type: string
           in: header
@@ -130,7 +130,7 @@ paths:
         - application/json
       responses:
         '200':
-          description: Account retrieved successully
+          description: Accounts retrieved successully
           schema:
             $ref: '#/definitions/ApiDashboard'
         '400':
@@ -276,6 +276,8 @@ definitions:
       transactions:
         type: array
         description: list of transactions
+        items:
+          $ref: '#/definitions/Transaction'
   ApiDashboard:
     type: object
     properties:
@@ -284,17 +286,10 @@ definitions:
       message:
         type: string
       body:
-        type: object
-        properties:
-          id:
-            type: string
-            description: account number
-          balance:
-            type: string
-            description: account balance
-          transactions:
-            type: array
-            description: list of transactions
+        type: array
+        description: list of accounts
+        items:
+          $ref: '#/definitions/Account'
   ApiResponse:
     type: object
     properties:
