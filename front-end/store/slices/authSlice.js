@@ -52,7 +52,7 @@ export const { setIsAuth, setToken, setProfile, setError, logout, setSuccessUpda
 export const { selectIsAuth, selectToken, selectProfile, selectError, selectErrorUpdate, selectSuccessUpdate } = AuthSlice.selectors;
 
 export const logIn = (email, password) => async (dispatch) => {
-    
+    dispatch(setError(null));
     try {
       const fetchData = await fetch("http://localhost:3001/api/v1/user/login", {
         method: "POST",
@@ -68,9 +68,10 @@ export const logIn = (email, password) => async (dispatch) => {
       }
 
       else if (response.status !== 200 && response.body.token) dispatch(setError(response.status))
-    
+      
     } catch (error) {
-      dispatch(setError(error.toString()));
+      if (error.toString() === `TypeError: can't access property "token", response.body is undefined`) dispatch(setError('Les identifiants de connexion sont incorrect'));
+      else dispatch(setError(error.toString()));
     }
 
 }

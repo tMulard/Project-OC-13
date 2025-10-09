@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import "./Login.css"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { logIn} from "../../../store/slices/authSlice.js";
+import { logIn, selectError} from "../../../store/slices/authSlice.js";
 import { selectIsAuth } from "../../../store/slices/authSlice";
 
 const Login = () => {
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const isAuth = useSelector(selectIsAuth)
+  const isAuth = useSelector(selectIsAuth);
   const dispatch = useDispatch();
+  const errorMsg = useSelector(selectError);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -87,6 +88,7 @@ const Login = () => {
                 onChange={handleChange}
               />
               {formErrors.password && <p className="error">{formErrors.password}</p>}
+              {errorMsg && <p className="error">{errorMsg}</p>}
             </div>
             <div className="input-remember">
               <input type="checkbox" id="remember-me" />

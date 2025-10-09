@@ -37,9 +37,11 @@ const Header = () => {
               <i className="fa fa-user-circle"></i>
               {profile?.firstName}
             </Link>
-            <button onClick={() => {dispatch(logout())
-              navigate("/")
-            }}>Sign out</button>
+            <Link className="main-nav-item" onClick={() => {dispatch(logout()) 
+              navigate("/") }}>
+              <i className="fa fa-sign-out"></i>
+              Sign Out
+            </Link>
           </>
         ) : (
           <>

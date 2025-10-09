@@ -143,13 +143,38 @@ paths:
         - Bearer: []
       tags:
         - Transaction Module 🆕
+      summary: Transactions API
+      description: API for fetching transactions
+      parameters:
+        - type: string
+          in: header
+          name: Authorization
+          description: Attach account id
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions retrieved successully
+          schema:
+            $ref: '#/definitions/ApiTransaction'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /dashboard/transaction:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module 🆕
       summary: Transaction API
       description: API for fetching a transaction
       parameters:
         - type: string
           in: header
           name: Authorization
-          description: Attach account id
+          description: Attach a month to retrieve transactions of that month
           required: true
       produces:
         - application/json
@@ -181,7 +206,7 @@ paths:
         '200':
           description: Successful operation
           schema:
-            $ref: '#/definitions/ApiTransaction'
+            $ref: '#/definitions/Transaction'
         '400':
           description: Invalid input
         '422':
