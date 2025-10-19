@@ -144,13 +144,17 @@ paths:
       tags:
         - Transaction Module 🆕
       summary: Transactions API
-      description: API for fetching transactions
+      description: API for fetching transactions, by default will get all transactions for the current month
       parameters:
         - type: string
           in: header
           name: Authorization
           description: Attach account id
           required: true
+        - type: string
+          in: query
+          name: Month
+          description: Attach a month to search transactions in
       produces:
         - application/json
       responses:
@@ -192,8 +196,8 @@ paths:
         - Bearer: []
       tags:
         - Transaction Module 🆕
-      summary: Add a new transaction
-      description: Add a new transaction to the account
+      summary: Add a new information
+      description: Add a new information to the transaction
       parameters:
         - type: string
           in: header
@@ -244,8 +248,8 @@ paths:
     delete:
       tags:
         - Transaction Module 🆕
-      summary: Delete a transaction
-      description: delete a transaction
+      summary: Delete information linked to a transaction
+      description: delete information linked to a transaction
       parameters:
         - type: string
           in: header

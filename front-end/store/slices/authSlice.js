@@ -62,16 +62,15 @@ export const logIn = (email, password) => async (dispatch) => {
 
       const response = await fetchData.json();
       
-      if (response.status === 200 && response.body.token) {
+      if (response.status === 200 && response && response.body && response.body.token) {
         dispatch(setIsAuth(true))
         dispatch(setToken(response.body.token))
       }
 
-      else if (response.status !== 200 && response.body.token) dispatch(setError(response.status))
+      else if (response.status !== 200) dispatch(setError(response.message ? response.message : response.status))
       
     } catch (error) {
-      if (error.toString() === `TypeError: can't access property "token", response.body is undefined`) dispatch(setError('Les identifiants de connexion sont incorrect'));
-      else dispatch(setError(error.toString()));
+      dispatch(setError(error.toString()));
     }
 
 }
