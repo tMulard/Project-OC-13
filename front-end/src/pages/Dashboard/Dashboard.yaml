@@ -77,9 +77,13 @@ paths:
         '200':
           description: User profile retrieved successully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/User'
         '400':
           description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
         '500':
           description: Internal Server Error
     put:
@@ -105,11 +109,15 @@ paths:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile updated successully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/UserProfile'
         '400':
           description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
         '500':
           description: Internal Server Error
   /dashboard:
@@ -124,7 +132,7 @@ paths:
         - type: string
           in: header
           name: Authorization
-          description: Attach account id
+          description: Attach Bearer JWT token
           required: true
       produces:
         - application/json
@@ -133,8 +141,10 @@ paths:
           description: Accounts retrieved successully
           schema:
             $ref: '#/definitions/ApiDashboard'
-        '400':
-          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
         '500':
           description: Internal Server Error
   /dashboard/transactions:
@@ -149,6 +159,11 @@ paths:
         - type: string
           in: header
           name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - type: string
+          in: header
+          name: Account id
           description: Attach account id
           required: true
         - type: string
@@ -162,8 +177,10 @@ paths:
           description: Transactions retrieved successully
           schema:
             $ref: '#/definitions/ApiTransaction'
-        '400':
-          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
         '500':
           description: Internal Server Error
   /dashboard/transaction:
@@ -178,6 +195,11 @@ paths:
         - type: string
           in: header
           name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - type: string
+          in: header
+          name: Month
           description: Attach a month to retrieve transactions of that month
           required: true
       produces:
@@ -187,34 +209,12 @@ paths:
           description: Transaction retrieved successully
           schema:
             $ref: '#/definitions/ApiTransaction'
-        '400':
-          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
         '500':
           description: Internal Server Error
-    post:
-      security:
-        - Bearer: []
-      tags:
-        - Transaction Module 🆕
-      summary: Add a new information
-      description: Add a new information to the transaction
-      parameters:
-        - type: string
-          in: header
-          name: Authorization
-          description: Attach transaction id
-          required: true
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: Successful operation
-          schema:
-            $ref: '#/definitions/Transaction'
-        '400':
-          description: Invalid input
-        '422':
-          description: Validation exception
     put:
       security:
         - Bearer: []
@@ -226,7 +226,7 @@ paths:
         - type: string
           in: header
           name: Authorization
-          description: Attach transaction id
+          description: Attach Bearer JWT token
           required: true
         - in: body
           name: body
@@ -240,32 +240,13 @@ paths:
         '200':
           description: Transaction retrieved successully
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
+            $ref: '#/definitions/ApiTransaction'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
         '500':
           description: Internal Server Error
-    delete:
-      tags:
-        - Transaction Module 🆕
-      summary: Delete information linked to a transaction
-      description: delete information linked to a transaction
-      parameters:
-        - type: string
-          in: header
-          name: Authorization
-          description: Attach transaction id
-          required: true
-        - in: body
-          name: transactionId
-          description: Transaction id to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '400':
-          description: Invalid transaction value
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -343,15 +324,19 @@ definitions:
       body:
         type: object
         properties:
-          transactionId:
+          Date:
             type: string
-          value:
+          Description:
             type: string
-          date:
+          Amount:
             type: string
-          origin:
+          Balance:
             type: string
-          destination:
+          Transaction Type:
+            type: string
+          Category:
+            type: string
+          Notes:
             type: string
   LoginResponse:
     type: object
@@ -368,13 +353,17 @@ definitions:
   Transaction:
     type: object
     properties:
-      transactionId:
+      Date:
         type: string
-      value:
+      Description:
         type: string
-      date:
+      Amount:
         type: string
-      origin:
+      Balance:
         type: string
-      destination:
+      Transaction Type:
+        type: string
+      Category:
+        type: string
+      Notes:
         type: string

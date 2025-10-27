@@ -1,6 +1,15 @@
-.Nav {
+.main-nav {
     display: flex;
     flex-direction: row;
-    justify-content: right;
+    justify-content: space-between;
     gap : 30px;
+}
+
+@media screen and (max-width: 768px) {
+    .main-nav {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap : 30px;
+    }
 }
