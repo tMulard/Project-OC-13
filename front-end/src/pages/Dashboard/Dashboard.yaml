@@ -147,7 +147,7 @@ paths:
           description: Forbidden
         '500':
           description: Internal Server Error
-  /dashboard/transactions:
+  /dashboard/transactions/{accountId}:
     get:
       security:
         - Bearer: []
@@ -162,8 +162,8 @@ paths:
           description: Attach Bearer JWT token
           required: true
         - type: string
-          in: header
-          name: Account id
+          in: path
+          name: accountId
           description: Attach account id
           required: true
         - type: string
@@ -176,14 +176,14 @@ paths:
         '200':
           description: Transactions retrieved successully
           schema:
-            $ref: '#/definitions/ApiTransaction'
+            $ref: '#/definitions/Account'
         '401':
           description: Unauthorized
         '403':
           description: Forbidden
         '500':
           description: Internal Server Error
-  /dashboard/transaction:
+  /dashboard/transaction/{TransactionId}:
     get:
       security:
         - Bearer: []
@@ -196,6 +196,11 @@ paths:
           in: header
           name: Authorization
           description: Attach Bearer JWT token
+          required: true
+        - type: string
+          in: path
+          name: TransactionId
+          description: Attach transaction id
           required: true
         - type: string
           in: header
@@ -228,12 +233,17 @@ paths:
           name: Authorization
           description: Attach Bearer JWT token
           required: true
+        - type: string
+          in: path
+          name: TransactionId
+          description: Attach transaction id
+          required: true
         - in: body
           name: body
           description: Update transaction attributes
           required: true
           schema:
-            $ref: '#/definitions/ApiTransaction'
+            $ref: '#/definitions/Transaction'
       produces:
         - application/json
       responses:
@@ -324,6 +334,9 @@ definitions:
       body:
         type: object
         properties:
+          TransactionId:
+            type: string
+            description: transaction number
           Date:
             type: string
           Description:
@@ -353,6 +366,9 @@ definitions:
   Transaction:
     type: object
     properties:
+      TransactionId:
+        type: string
+        description: transaction number
       Date:
         type: string
       Description:
