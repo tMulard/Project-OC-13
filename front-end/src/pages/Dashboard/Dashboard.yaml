@@ -120,7 +120,7 @@ paths:
           description: Forbidden
         '500':
           description: Internal Server Error
-  /dashboard:
+  /profile:
     get:
       security:
         - Bearer: []
@@ -147,7 +147,7 @@ paths:
           description: Forbidden
         '500':
           description: Internal Server Error
-  /dashboard/transactions/{accountId}:
+  /transactions/{accountId}:
     get:
       security:
         - Bearer: []
@@ -176,14 +176,14 @@ paths:
         '200':
           description: Transactions retrieved successully
           schema:
-            $ref: '#/definitions/Account'
+            $ref: '#/definitions/ApiTransactions'
         '401':
           description: Unauthorized
         '403':
           description: Forbidden
         '500':
           description: Internal Server Error
-  /dashboard/transaction/{TransactionId}:
+  /transaction/{TransactionId}:
     get:
       security:
         - Bearer: []
@@ -202,25 +202,20 @@ paths:
           name: TransactionId
           description: Attach transaction id
           required: true
-        - type: string
-          in: header
-          name: Month
-          description: Attach a month to retrieve transactions of that month
-          required: true
       produces:
         - application/json
       responses:
         '200':
           description: Transaction retrieved successully
           schema:
-            $ref: '#/definitions/ApiTransaction'
+            $ref: '#/definitions/ApiTransactions'
         '401':
           description: Unauthorized
         '403':
           description: Forbidden
         '500':
           description: Internal Server Error
-    put:
+    patch:
       security:
         - Bearer: []
       tags:
@@ -240,7 +235,7 @@ paths:
           required: true
         - in: body
           name: body
-          description: Update transaction attributes
+          description: Update transaction attributes(Category and/or Notes)
           required: true
           schema:
             $ref: '#/definitions/Transaction'
@@ -248,9 +243,9 @@ paths:
         - application/json
       responses:
         '200':
-          description: Transaction retrieved successully
+          description: Transaction updated successully
           schema:
-            $ref: '#/definitions/ApiTransaction'
+            $ref: '#/definitions/Transaction'
         '401':
           description: Unauthorized
         '403':
@@ -293,11 +288,9 @@ definitions:
       balance:
         type: string
         description: account balance
-      transactions:
-        type: array
-        description: list of transactions
-        items:
-          $ref: '#/definitions/Transaction'
+      libelle:
+        type: string
+        description: account type 
   ApiDashboard:
     type: object
     properties:
@@ -324,7 +317,7 @@ definitions:
             type: string
           email:
             type: string
-  ApiTransaction:
+  ApiTransactions:
     type: object
     properties:
       status:
@@ -332,25 +325,10 @@ definitions:
       message:
         type: string
       body:
-        type: object
-        properties:
-          TransactionId:
-            type: string
-            description: transaction number
-          Date:
-            type: string
-          Description:
-            type: string
-          Amount:
-            type: string
-          Balance:
-            type: string
-          Transaction Type:
-            type: string
-          Category:
-            type: string
-          Notes:
-            type: string
+        type: array
+        description: list of transactions, maximum of twenty per page
+        items:
+          $ref: '#/definitions/Transaction'
   LoginResponse:
     type: object
     properties:
