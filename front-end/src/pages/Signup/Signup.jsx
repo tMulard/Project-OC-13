@@ -4,6 +4,7 @@ import "./Signup.css";
 import { useDispatch } from "react-redux";
 import { setIsAuth, setToken } from "../../../store/slices/authSlice";
 import { useNavigate } from "react-router";
+import Footer from "../../Components/Footer/Footer";
 
 const Signup = () => {
   // const [email, setEmail] = useState("");
@@ -150,9 +151,7 @@ const Signup = () => {
           </form>
         </section>
       </main>
-      <footer className="footer">
-        <p className="footer-text">Copyright 2020 Argent Bank</p>
-      </footer>
+      <Footer />
     </>
   );
 };

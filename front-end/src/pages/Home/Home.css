@@ -18,6 +18,8 @@ html {
   }
   .bg-dark {
     background-color: #12002b;
+    height: 720px;
+    padding-top: 20px;
   }
   
   .sr-only {
@@ -233,7 +235,7 @@ html {
     padding: 1.5rem;
     box-sizing: border-box;
     text-align: left;
-    margin-bottom: 2rem;
+    margin-bottom: 10px;
   }
   
   .account-amount {

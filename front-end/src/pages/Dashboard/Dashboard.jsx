@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import "./Dashboard.css";
 import { selectIsAuth, selectProfile, selectSuccessUpdate, upDate } from "../../../store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Footer from "../../Components/Footer/Footer";
 
 const Dashboard = () => {
   let navigate = useNavigate();
@@ -89,7 +90,7 @@ const Dashboard = () => {
           <h1>
             Welcome back
             <br />
-            {profile?.firstName} !
+            {profile?.firstName} {profile?.lastName} !
           </h1>
 
           <button className="edit-button" onClick={displayModal}>
@@ -165,9 +166,7 @@ const Dashboard = () => {
           </div>
         </section>
       </main>
-      <footer className="footer">
-        <p className="footer-text">Copyright 2020 Argent Bank</p>
-      </footer>
+      <Footer />
     </>
   );
 };
