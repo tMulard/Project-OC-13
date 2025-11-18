@@ -1,6 +1,7 @@
 import chatIcon from "../../assets/icon-chat.png";
 import moneyIcon from "../../assets/icon-money.png";
 import securityIcon from "../../assets/icon-security.png";
+import Footer from "../../Components/Footer/Footer";
 
 import "./Home.css"
 
@@ -56,9 +57,7 @@ const Home = () => {
           </div>
         </section>
       </main>
-      <footer className="footer">
-        <p className="footer-text">Copyright 2020 Argent Bank</p>
-      </footer>
+      <Footer />
     </>
   );
 };

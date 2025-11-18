@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { logIn, selectError} from "../../../store/slices/authSlice.js";
 import { selectIsAuth } from "../../../store/slices/authSlice";
+import Footer from "../../Components/Footer/Footer.jsx";
 
 const Login = () => {
   // const [email, setEmail] = useState("");
@@ -98,9 +99,7 @@ const Login = () => {
           </form>
         </section>
       </main>
-      <footer className="footer">
-        <p className="footer-text">Copyright 2020 Argent Bank</p>
-      </footer>
+      <Footer />
     </>
   );
 };
